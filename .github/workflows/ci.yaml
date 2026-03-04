@@ -30,8 +30,20 @@ jobs:
           coverage run -m pytest
           coverage xml
 
+      - name: Debug coverage
+        run: |
+          ls -la
+          head -n 5 coverage.xml
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarqube-scan-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io
+
+      - name: Quality Gate
+        uses: SonarSource/sonarqube-quality-gate-action@v1.1.0
+        timeout-minutes: 5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_HOST_URL: https://sonarcloud.io
